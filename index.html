@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAK-EXAM-HUB - All Pakistan Entry & Competitive Exam Portal</title>
+  <style>
+    :root {
+      --bg-main: #0b132b;
+      --bg-sidebar: #1c2541;
+      --bg-card: #1c2541;
+      --accent: #3a86ff;
+      --accent-green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --gold: #f59e0b;
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f1f5f9;
+      --bg-sidebar: #ffffff;
+      --bg-card: #ffffff;
+      --accent: #2563eb;
+      --accent-green: #059669;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --gold: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    sidebar {
+      width: 320px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+      overflow-y: auto;
+      transition: background-color 0.3s;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: 0.5px;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .search-box {
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .nav-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-green);
+      margin: 14px 0 6px 6px;
+      font-weight: 700;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background-color: rgba(59, 130, 246, 0.12);
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      border-left: 4px solid var(--accent);
+      font-weight: 600;
+    }
+
+    .repeat-item.active {
+      border-left: 4px solid var(--gold) !important;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    header {
+      padding: 18px 35px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--bg-sidebar);
+    }
+
+    .header-title h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .content-area {
+      padding: 25px 35px;
+      max-width: 950px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 18px;
+      transition: background-color 0.3s;
+    }
+
+    .repeat-badge {
+      display: inline-block;
+      background-color: rgba(245, 158, 11, 0.15);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .question-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background-color: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 11px 15px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .option-btn.correct {
+      background-color: rgba(34, 197, 94, 0.2);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .option-btn.incorrect {
+      background-color: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .explanation {
+      margin-top: 12px;
+      padding: 12px;
+      background-color: var(--bg-main);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: none;
+      border-left: 3px solid var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      sidebar {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <sidebar>
+    <div class="brand">
+      <span>🇵🇰 PAK-EXAM-HUB</span>
+      <button class="theme-toggle" onclick="toggleTheme()">☀️/🌙</button>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search test category..." onkeyup="filterNav()">
+    </div>
+
+    <div class="nav-title" style="color: var(--gold);">🔥 High-Yield Repeated</div>
+    <ul class="nav-list">
+      <li class="nav-item repeat-item active" onclick="loadCategory('most_repeated', this)">
+        <span>🔥 Most Repeated MCQs</span>
+      </li>
+    </ul>
+
+    <div class="nav-title">Civil Services</div>
+    <ul class="nav-list">
+      <li class="nav-item" onclick="loadCategory('css_mpt', this)">
+        <span>🏛️ CSS MPT Screening</span>
+      </li>
+      <li class="nav-item" onclick="loadCategory('pms_exam', this)">
+        <span>📜 PMS Provincial Exam</span>
+      </li>
+      <li class="nav-item" onclick="loadCategory('one_paper_mcq', this)">
+        <span>📋 FPSC / PPSC / SPSC 1-Paper</span>
+      </li>
+    </ul>
+
+    <div class="nav-title">Defense & Forces</div>
+    <ul class="nav-list">
+      <li class="nav-item" onclick="loadCategory('pma_long_course', this)">
+        <span>🎖️ PMA Long Course / 2nd Lt</span>
+      </li>
+      <li class="nav-item" onclick="loadCategory('intelligence_drills', this)">
+        <span>🧠 Verbal & Non-Verbal Intel</span>
+      </li>
+    </ul>
+
+    <div class="nav-title">Testing Agencies & Entry</div>
+    <ul class="nav-list">
+      <li class="nav-item" onclick="loadCategory('lat_exam', this)">
+        <span>⚖️ HEC LAT (Law Test)</span>
+      </li>
+      <li class="nav-item" onclick="loadCategory('mdcat', this)">
+        <span>🩺 PMDC MDCAT (Medical)</span>
+      </li>
+      <li class="nav-item" onclick="loadCategory('nts_nat_gat', this)">
+        <span>📊 NTS NAT / GAT</span>
+      </li>
+    </ul>
+
+    <div class="nav-title">Board Exams</div>
+    <ul class="nav-list">
+      <li class="nav-item" onclick="loadCategory('class10_board', this)">
+        <span>🔬 Class 10 Board Core</span>
+      </li>
+    </ul>
+  </sidebar>
+
+  <main>
+    <header>
+      <div class="header-title">
+        <h1 id="subject-heading">Most Repeated MCQs (PAK-EXAM-HUB)</h1>
+        <p id="subject-desc">Top high-yield questions repeatedly asked across FPSC, PPSC, SPSC, NTS, PMA Computer Tests, MDCAT, and LAT.</p>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div id="main-container">
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const database = {
+      'most_repeated': {
+        title: "Most Repeated MCQs (PAK-EXAM-HUB)",
+        desc: "Questions appearing consistently in FPSC, PPSC, SPSC, NTS, LAT, MDCAT, and PMA Officer Initial Tests.",
+        data: [
+          {
+            badge: "Repeated in FPSC / PPSC / SPSC",
+            q: "Which is the highest military award of Pakistan?",
+            options: ["Hilal-i-Imtiaz", "Nishan-e-Haider", "Sitara-e-Jurat", "Tamgha-e-Shujaat"],
+            correct: 1,
+            exp: "Nishan-e-Haider is the highest military award in Pakistan."
+          },
+          {
+            badge: "Repeated in PMA / Defense / NTS Tests",
+            q: "If 90% of 90 is equal to what number?",
+            options: ["9", "81", "90", "100"],
+            correct: 1,
+            exp: "Calculated as: (90 / 100) × 90 = 81."
+          },
+          {
+            badge: "Repeated in HEC LAT / CSS MPT",
+            q: "What is the passing score out of 100 in the HEC Law Admission Test (LAT)?",
+            options: ["40 Marks", "50 Marks", "60 Marks", "75 Marks"],
+            correct: 1,
+            exp: "50/100 marks is the required passing threshold."
+          },
+          {
+            badge: "Repeated in MDCAT / Science Tests",
+            q: "Which cell organelle is called the powerhouse of the cell?",
+            options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi Apparatus"],
+            correct: 1,
+            exp: "Mitochondria produce cellular energy (ATP)."
+          }
+        ]
+      },
+      'css_mpt': {
+        title: "CSS MPT Screening",
+        desc: "200 Marks mandatory screening test conducted by FPSC.",
+        data: [
+          {
+            badge: "FPSC CSS",
+            q: "Who was the Prime Minister of Pakistan when the 1973 Constitution was enacted?",
+            options: ["Zulfikar Ali Bhutto", "Liaquat Ali Khan", "Ayub Khan", "Yahya Khan"],
+            correct: 0,
+            exp: "Zulfikar Ali Bhutto served as Prime Minister when the 1973 Constitution was enacted."
+          }
+        ]
+      },
+      'pms_exam': {
+        title: "PMS Provincial Exam",
+        desc: "Provincial civil services officer examination.",
+        data: [
+          {
+            badge: "Provincial Service",
+            q: "Which commission conducts provincial civil service exams in Sindh?",
+            options: ["FPSC", "PPSC", "SPSC", "BPSC"],
+            correct: 2,
+            exp: "SPSC (Sindh Public Service Commission) conducts civil service recruitment in Sindh."
+          }
+        ]
+      },
+      'one_paper_mcq': {
+        title: "FPSC / PPSC / SPSC 1-Paper MCQs",
+        desc: "General recruitment tests for Inspectors, ASIs, and Officers.",
+        data: [
+          {
+            badge: "1-Paper General",
+            q: "In which city is the United Nations Headquarters located?",
+            options: ["Geneva", "London", "New York", "Paris"],
+            correct: 2,
+            exp: "The UN Headquarters is located in New York City."
+          }
+        ]
+      },
+      'pma_long_course': {
+        title: "PMA Long Course / 2nd Lieutenant Test",
+        desc: "Initial computer screening test for Army Officer candidates.",
+        data: [
+          {
+            badge: "PMA Initial Test",
+            q: "Where is the Pakistan Military Academy (PMA) located?",
+            options: ["Rawalpindi", "Kakul, Abbottabad", "Risalpur", "Quetta"],
+            correct: 1,
+            exp: "PMA is located in Kakul, Abbottabad."
+          }
+        ]
+      },
+      'intelligence_drills': {
+        title: "Verbal & Non-Verbal Intelligence",
+        desc: "Logic and sequence drills for armed forces screening.",
+        data: [
+          {
+            badge: "Verbal Intelligence",
+            q: "Complete the sequence: 3, 6, 12, 24, ___?",
+            options: ["36", "48", "60", "72"],
+            correct: 1,
+            exp: "Double the previous number: 24 × 2 = 48."
+          }
+        ]
+      },
+      'lat_exam': {
+        title: "HEC Law Admission Test (LAT)",
+        desc: "Mandatory entrance exam for 5-year LLB programs.",
+        data: [
+          {
+            badge: "LAT General",
+            q: "What is the antonym of 'Transparent'?",
+            options: ["Clear", "Opaque", "Bright", "Lucid"],
+            correct: 1,
+            exp: "'Opaque' is the direct antonym of transparent."
+          }
+        ]
+      },
+      'mdcat': {
+        title: "PMDC MDCAT (Medical Entrance)",
+        desc: "Medical college entry test across Pakistan.",
+        data: [
+          {
+            badge: "MDCAT Biology",
+            q: "Which cellular component is responsible for protein synthesis?",
+            options: ["Ribosome", "Mitochondria", "Lysosome", "Vacuole"],
+            correct: 0,
+            exp: "Ribosomes translate genetic material into proteins."
+          }
+        ]
+      },
+      'nts_nat_gat': {
+        title: "NTS NAT / GAT",
+        desc: "Aptitude tests for university admissions and scholarships.",
+        data: [
+          {
+            badge: "NTS Standard",
+            q: "How long is an NTS NAT score valid?",
+            options: ["6 Months", "1 Year", "2 Years", "Lifetime"],
+            correct: 1,
+            exp: "NTS NAT test results remain valid for 1 year."
+          }
+        ]
+      },
+      'class10_board': {
+        title: "Class 10 Board Core Subjects",
+        desc: "Matriculation examination revision questions.",
+        data: [
+          {
+            badge: "Class 10 Chemistry",
+            q: "What is the chemical formula for Sodium Chloride?",
+            options: ["HCl", "NaCl", "NaOH", "NaHCO3"],
+            correct: 1,
+            exp: "Sodium Chloride is represented as NaCl."
+          }
+        ]
+      }
+    };
+
+    let currentCategoryKey = 'most_repeated';
+
+    function loadCategory(key, element) {
+      currentCategoryKey = key;
+
+      if (element) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+      }
+
+      const cat = database[key];
+      document.getElementById('subject-heading').innerText = cat.title;
+      document.getElementById('subject-desc').innerText = cat.desc;
+
+      const container = document.getElementById('main-container');
+      container.innerHTML = '';
+
+      cat.data.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          ${item.badge ? `<span class="repeat-badge">${item.badge}</span>` : ''}
+          <div class="question-title">Q${index + 1}. ${item.q}</div>
+          <div class="options-grid">
+            ${item.options.map((opt, i) => `
+              <button class="option-btn" onclick="checkAnswer(this, ${index}, ${i})">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="explanation" id="exp-${index}">${item.exp}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function checkAnswer(btn, qIndex, optionIndex) {
+      const parent = btn.parentElement;
+      const buttons = parent.querySelectorAll('.option-btn');
+      const correctIdx = database[currentCategoryKey].data[qIndex].correct;
+
+      buttons.forEach(b => b.style.pointerEvents = 'none');
+
+      if (optionIndex === correctIdx) {
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('incorrect');
+        buttons[correctIdx].classList.add('correct');
+      }
+
+      document.getElementById(`exp-${qIndex}`).style.display = 'block';
+    }
+
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    function filterNav() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const items = document.querySelectorAll('.nav-item');
+      items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    loadCategory('most_repeated', document.querySelector('.repeat-item'));
+  </script>
+</body>
+</html>
